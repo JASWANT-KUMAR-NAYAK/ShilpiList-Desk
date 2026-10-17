@@ -1,0 +1,34 @@
+{
+  "_note": "Starter glossary. Odia and Hindi spellings are UNREVIEWED drafts: have a native speaker check every entry, then set reviewed to true. Empty strings mean unknown.",
+  "terms": [
+    {"craft_type": "filigree", "term_en": "Tarakasi (silver filigree)", "term_hi": "तारकशी", "term_or": "ତାରକସି", "definition": "Cuttack silver wire filigree work", "reviewed": false},
+    {"craft_type": "ikat", "term_en": "Sambalpuri ikat", "term_hi": "संबलपुरी इकत", "term_or": "ସମ୍ବଲପୁରୀ ଇକତ", "definition": "Tie-dyed warp or weft handloom weaving from western Odisha", "reviewed": false},
+    {"craft_type": "pattachitra", "term_en": "Pattachitra", "term_hi": "पट्टचित्र", "term_or": "ପଟ୍ଟଚିତ୍ର", "definition": "Traditional cloth-based scroll painting of Odisha", "reviewed": false},
+    {"craft_type": "dhokra", "term_en": "Dhokra", "term_hi": "ढोकरा", "term_or": "ଢୋକରା", "definition": "Lost-wax metal casting craft", "reviewed": false},
+    {
+      "craft_type": "pipili applique",
+      "term_en": "Pipili applique",
+      "term_hi": "पिपिली चाँदुआ (एप्लिक कला)",
+      "term_or": "ପିପିଲି ଚାନ୍ଦୁଆ କାମ",
+      "definition": "Applique craft associated with Pipili, Odisha",
+      "reviewed": false
+    },
+    {
+      "craft_type": "terracotta",
+      "term_en": "Terracotta",
+      "term_hi": "टेराकोटा",
+      "term_or": "ଟେରାକୋଟା",
+      "definition": "Craft material made from fired clay",
+      "reviewed": false
+    },
+    {
+      "craft_type": "wooden jagannath",
+      "term_en": "Wooden Jagannath",
+      "term_hi": "पिपिली चाँदुआ (एप्लिक कला)",
+      "term_or": "ପିପିଲି ଚାନ୍ଦୁଆ କାମ",
+      "definition": "Wooden figure depicting Jagannath",
+      "reviewed": false
+    }
+  ]
+
+}

@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174d3a">
+  <title>ShilpiList Desk</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #20352b;
+      --muted: #6d7b72;
+      --green: #1f684b;
+      --green-dark: #174d3a;
+      --green-soft: #e8f2eb;
+      --paper: #f7f8f3;
+      --card: #ffffff;
+      --line: #e1e8df;
+      --warning: #8b5a12;
+      --warning-bg: #fff5df;
+      --danger: #a43b35;
+      --shadow: 0 10px 30px rgba(27, 58, 42, .06);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.5; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .62; }
+    .topbar { background: var(--green-dark); color: white; }
+    .topbar-inner { max-width: 1180px; margin: 0 auto; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: -.025em; font-size: 1.12rem; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: rgba(255,255,255,.14); font-size: 1.15rem; }
+    .top-note { color: #d5e7dc; font-size: .84rem; }
+    main { max-width: 1180px; margin: 0 auto; padding: 34px 24px 60px; }
+    .hero { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 26px; }
+    .eyebrow { color: var(--green); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 8px; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -.045em; line-height: 1.1; margin: 0; }
+    .hero-copy { color: var(--muted); max-width: 650px; margin: 12px 0 0; }
+    .hero-pill { flex-shrink: 0; border: 1px solid #cddfd1; background: #eef6ef; color: var(--green-dark); border-radius: 999px; padding: 9px 13px; font-size: .82rem; font-weight: 700; }
+    .notice { display: flex; gap: 12px; align-items: start; border: 1px solid #ead9ad; background: #fff9e9; border-radius: 14px; padding: 14px 16px; color: #72501a; margin-bottom: 26px; font-size: .9rem; }
+    .notice strong { display: block; margin-bottom: 2px; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 28px 0 14px; }
+    h2 { font-size: 1.12rem; margin: 0; letter-spacing: -.02em; }
+    .section-sub { color: var(--muted); font-size: .88rem; margin: 4px 0 0; }
+    .product-list { display: grid; gap: 16px; }
+    .product-card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .product-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; background: #fbfcf9; border-bottom: 1px solid var(--line); }
+    .product-title { display: flex; align-items: center; gap: 11px; font-weight: 750; }
+    .number { display: grid; place-items: center; width: 30px; height: 30px; background: var(--green-soft); color: var(--green-dark); border-radius: 10px; font-size: .85rem; }
+    .product-body { padding: 20px; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 18px; }
+    .field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-size: .83rem; font-weight: 700; color: #354a3d; }
+    .required { color: var(--green); }
+    input[type="text"], input:not([type]), select, .field input[type="text"] {
+      width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #d7e0d6; border-radius: 10px; background: #fff; color: var(--ink); outline: none;
+    }
+    input:focus, select:focus { border-color: #4e9a72; box-shadow: 0 0 0 3px rgba(54, 133, 88, .12); }
+    input[type="file"] { width: 100%; border: 1px dashed #bdcfc0; border-radius: 10px; background: #f8fbf7; padding: 10px; font-size: .85rem; color: var(--muted); }
+    .field-hint { font-size: .76rem; color: var(--muted); margin-top: -2px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; border-radius: 10px; min-height: 42px; padding: 9px 14px; font-weight: 750; font-size: .88rem; transition: transform .15s ease, background .15s ease; }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn-primary { color: white; background: var(--green); }
+    .btn-primary:hover:not(:disabled) { background: var(--green-dark); }
+    .btn-secondary { background: white; border-color: #d7e0d6; color: var(--ink); }
+    .btn-secondary:hover:not(:disabled) { background: #f5f8f4; }
+    .btn-quiet { background: transparent; color: var(--muted); border-color: transparent; min-height: 34px; padding: 6px 9px; }
+    .btn-quiet:hover:not(:disabled) { background: #fbeeed; color: var(--danger); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; padding: 18px; border: 1px solid var(--line); background: #fff; border-radius: 16px; margin-top: 18px; }
+    .toolbar .field { min-width: 180px; }
+    .toolbar select { min-height: 42px; border: 1px solid #d7e0d6; border-radius: 10px; padding: 8px 12px; background: #fff; color: var(--ink); }
+    .toolbar-spacer { flex: 1; }
+    .status { min-height: 20px; margin: 10px 2px 0; color: var(--muted); font-size: .85rem; }
+    .results { display: grid; gap: 16px; }
+    .result-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+    .result-head { padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); background: #fbfcf9; }
+    .result-head h3 { margin: 0; font-size: 1rem; }
+    .result-body { padding: 18px; }
+    .language-block { padding: 14px 0; border-bottom: 1px solid #edf0eb; }
+    .language-block:first-child { padding-top: 0; }
+    .language-block:last-child { border-bottom: 0; padding-bottom: 0; }
+    .language-label { display: inline-flex; margin-bottom: 7px; border-radius: 7px; padding: 4px 8px; background: var(--green-soft); color: var(--green-dark); font-size: .73rem; font-weight: 800; letter-spacing: .04em; }
+    .language-block h4 { margin: 0 0 6px; font-size: 1rem; }
+    .language-block p { white-space: pre-wrap; margin: 0; color: #526157; font-size: .92rem; }
+    .warning-line { color: var(--warning); background: var(--warning-bg); border-radius: 9px; padding: 9px 11px; margin: 0 0 12px; font-size: .84rem; }
+    .result-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 12px 18px; background: #fbfcf9; border-top: 1px solid var(--line); }
+    .result-actions select { min-height: 38px; border: 1px solid #d7e0d6; border-radius: 9px; padding: 6px 10px; background: #fff; }
+    .empty { padding: 28px 20px; border: 1px dashed #cbd8cc; border-radius: 15px; text-align: center; color: var(--muted); background: rgba(255,255,255,.6); }
+    .empty strong { display: block; color: var(--ink); margin-bottom: 4px; }
+    .small-muted { font-size: .8rem; color: var(--muted); }
+    @media (max-width: 700px) {
+      .topbar-inner { padding: 14px 16px; }
+      .top-note { display: none; }
+      main { padding: 26px 15px 42px; }
+      .hero { align-items: start; flex-direction: column; gap: 14px; }
+      .hero-pill { white-space: normal; }
+      .field-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .product-body { padding: 16px; }
+      .product-head { padding: 14px 16px; }
+      .toolbar { align-items: stretch; padding: 14px; }
+      .toolbar .field { min-width: 100%; }
+      .toolbar-spacer { display: none; }
+      .toolbar .btn { flex: 1 1 40%; }
+      .result-head { align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✳</span><span>ShilpiList Desk</span></div>
+      <div class="top-note">Made for craft sellers · Odisha</div>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Product listing workspace</p>
+        <h1>Turn craft details into<br>ready-to-review listings.</h1>
+        <p class="hero-copy">Add your product facts and photos to draft marketplace descriptions in English, Hindi, and Odia.</p>
+      </div>
+      <div class="hero-pill">✦ Batch workflow · Up to 10 products</div>
+    </section>
+
+    <aside class="notice">
+      <span aria-hidden="true">⚠️</span>
+      <div><strong>Review before publishing</strong>Odia is a machine draft and should be reviewed by a native speaker. Warnings are simple checks, not proof that a listing is accurate. Read every listing before publishing.</div>
+    </aside>
+
+    <div class="section-head">
+      <div><h2>Product details</h2><p class="section-sub">Enter the facts you can verify. Leave optional details blank if unknown.</p></div>
+      <span class="small-muted" id="productCount">1 of 10 products</span>
+    </div>
+    <div id="rows" class="product-list"></div>
+    <button class="btn btn-secondary" id="addBtn" type="button" onclick="add()">＋ Add another product</button>
+
+    <div class="section-head">
+      <div><h2>Generate listings</h2><p class="section-sub">Choose a tone, then generate drafts for your products.</p></div>
+    </div>
+    <section class="toolbar" aria-label="Listing actions">
+      <div class="field">
+        <label for="tone">Writing tone</label>
+        <select id="tone"><option value="simple">Simple and clear</option><option value="premium">Premium</option><option value="gift">Gift-focused</option></select>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-secondary" type="button" onclick="showHistory()">◷ History</button>
+      <button class="btn btn-secondary" type="button" onclick="copyAll()">Copy all</button>
+      <button class="btn btn-secondary" type="button" onclick="exportCsv()">Export CSV</button>
+      <button class="btn btn-primary" id="goBtn" type="button" onclick="go()">✦ Generate listings</button>
+    </section>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <div class="section-head">
+      <div><h2>Listing drafts</h2><p class="section-sub">Review the facts, warnings, and wording before using a listing.</p></div>
+    </div>
+    <div id="out" class="results"><div class="empty"><strong>Your listings will appear here</strong>Fill in a product above and select Generate listings.</div></div>
+  </main>
+
+<script>
+const results = [];
+
+const add = () => {
+  if (rows.children.length >= 10) return;
+  const index = rows.children.length + 1;
+  rows.insertAdjacentHTML('beforeend', `<section class="product-card" aria-label="Product ${index}">
+    <div class="product-head">
+      <div class="product-title"><span class="number">${index}</span><span>Product ${index}</span></div>
+      <button class="btn btn-quiet remove-product" type="button" aria-label="Remove product ${index}">Remove</button>
+    </div>
+    <div class="product-body">
+      <div class="field-grid">
+        <div class="field full">
+          <label>Product photos <span class="required">*</span></label>
+          <input type="file" name="files" multiple accept="image/*" required>
+          <span class="field-hint">Choose one or more clear photos of this product.</span>
+        </div>
+
+        <div class="field">
+          <label>Product name <span class="required">*</span></label>
+          <input name="product_name" placeholder="e.g. Wall hanging" required>
+        </div>
+
+        <div class="field">
+          <label>Craft / technique <span class="required">*</span></label>
+          <input name="craft" placeholder="e.g. Pipili applique" required>
+        </div>
+
+        <div class="field">
+          <label>Material <span class="required">*</span></label>
+          <input name="material" placeholder="e.g. Cotton fabric, wooden frame" required>
+        </div>
+
+        <div class="field">
+          <label>Dimensions <span class="required">*</span></label>
+          <input name="dimensions" placeholder="e.g. 30 × 30 cm" required>
+        </div>
+
+        <div class="field">
+          <label>Maker / artisan</label>
+          <input name="maker" placeholder="Maker or artisan group">
+        </div>
+
+        <div class="field">
+          <label>Village / location</label>
+          <input name="village" placeholder="Village, district">
+        </div>
+
+        <div class="field">
+          <label>GI status <span class="small-muted">(optional)</span></label>
+          <input name="gi" placeholder="e.g. GI registered / Not certified">
+        </div>
+      </div>
+    </div>
+  </section>`);
+
+  const card = rows.lastElementChild;
+  card.querySelector('.remove-product').addEventListener('click', () => {
+    if (rows.children.length <= 1) {
+      setStatus('Keep at least one product form on the page.');
+      return;
+    }
+    card.remove();
+    renumberProducts();
+  });
+  renumberProducts();
+};
+
+function renumberProducts() {
+  [...rows.children].forEach((card, i) => {
+    card.setAttribute('aria-label', `Product ${i + 1}`);
+    card.querySelector('.number').textContent = i + 1;
+    card.querySelector('.product-title span:last-child').textContent = `Product ${i + 1}`;
+    card.querySelector('.remove-product').setAttribute('aria-label', `Remove product ${i + 1}`);
+  });
+  addBtn.disabled = rows.children.length >= 10;
+  addBtn.textContent = rows.children.length >= 10 ? 'Maximum of 10 products reached' : '＋ Add another product';
+  productCount.textContent = `${rows.children.length} of 10 product${rows.children.length === 1 ? '' : 's'}`;
+}
+add();
+
+async function call(url, body) {
+  const opts = body instanceof FormData ? {method: 'POST', body}
+    : body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : {};
+  const r = await fetch(url, opts);
+  let j = null;
+  try { j = await r.json(); } catch {}
+  if (r.ok) return j;
+  throw new Error(j && typeof j.detail == 'string' ? j.detail : `HTTP ${r.status}`);
+}
+
+const fmt = (d, i) => `#${i + 1} ${d.facts.product_name} | Craft: ${d.facts.craft}\n` +
+  (d.warnings.length ? `WARNING, not in your facts: ${d.warnings.join(', ')}\n` : '') +
+  (d.terms.length ? `CHECK, craft term not found: ${d.terms.join(', ')}\n` : '') +
+  `EN: ${d.content.en.title}\n${d.content.en.description}\n\nHI: ${d.content.hi.title}\n${d.content.hi.description}\n\n` +
+  `OR (draft, needs native review): ${d.content.or.title}\n${d.content.or.description}\n`;
+
+function makeLanguage(label, title, description, isOdia = false) {
+  const section = document.createElement('section');
+  section.className = 'language-block';
+  const badge = document.createElement('span');
+  badge.className = 'language-label';
+  badge.textContent = label;
+  section.appendChild(badge);
+  const heading = document.createElement('h4');
+  heading.textContent = title || 'Untitled listing';
+  section.appendChild(heading);
+  const p = document.createElement('p');
+  p.textContent = description || '';
+  section.appendChild(p);
+  if (isOdia) {
+    const hint = document.createElement('div');
+    hint.className = 'small-muted';
+    hint.style.marginTop = '8px';
+    hint.textContent = 'Machine draft · Native-speaker review required';
+    section.appendChild(hint);
+  }
+  return section;
+}
+
+function show(slot, i) {
+  const d = results[i];
+  slot.replaceChildren();
+  slot.className = 'result-card';
+  const head = document.createElement('div');
+  head.className = 'result-head';
+  const title = document.createElement('h3');
+  title.textContent = `Product ${i + 1}: ${d.facts.product_name || d.facts.craft || 'Listing draft'}`;
+  head.appendChild(title);
+  slot.appendChild(head);
+
+  const body = document.createElement('div');
+  body.className = 'result-body';
+  if (d.warnings.length) {
+    const warning = document.createElement('div');
+    warning.className = 'warning-line';
+    warning.textContent = `⚠ Warning — not found in your facts: ${d.warnings.join(', ')}`;
+    body.appendChild(warning);
+  }
+  if (d.terms.length) {
+    const terms = document.createElement('div');
+    terms.className = 'warning-line';
+    terms.textContent = `Check craft terms: ${d.terms.join(', ')}`;
+    body.appendChild(terms);
+  }
+  body.appendChild(makeLanguage('ENGLISH', d.content.en.title, d.content.en.description));
+  body.appendChild(makeLanguage('HINDI', d.content.hi.title, d.content.hi.description));
+  body.appendChild(makeLanguage('ODIA · REVIEW REQUIRED', d.content.or.title, d.content.or.description, true));
+  slot.appendChild(body);
+
+  const actions = document.createElement('div');
+  actions.className = 'result-actions';
+  const re = document.createElement('button');
+  re.className = 'btn btn-secondary';
+  re.type = 'button';
+  re.textContent = '↻ Regenerate';
+  re.onclick = async () => {
+    re.disabled = true;
+    setStatus(`Regenerating product ${i + 1}…`);
+    try {
+      results[i] = await call(`/listings/${d.id}/regenerate`, {tone: tone.value});
+      show(slot, i);
+      setStatus(`Product ${i + 1} regenerated.`);
+    } catch (e) {
+      re.disabled = false;
+      setStatus(`Regenerate failed: ${e.message}`, true);
+    }
+  };
+  actions.appendChild(re);
+  const label = document.createElement('label');
+  label.htmlFor = `rating-${i}`;
+  label.textContent = 'Rate draft';
+  actions.appendChild(label);
+  const rate = document.createElement('select');
+  rate.id = `rating-${i}`;
+  rate.setAttribute('aria-label', `Rate product ${i + 1} from 1 to 5`);
+  rate.innerHTML = '<option value="">Choose 1–5</option>' + [1, 2, 3, 4, 5].map(n => `<option value="${n}">${n} / 5</option>`).join('');
+  rate.onchange = async () => {
+    if (!rate.value) return;
+    rate.disabled = true;
+    try {
+      await call(`/listings/${d.id}/feedback`, {rating: +rate.value});
+      setStatus('Thanks — feedback saved.');
+    } catch (e) {
+      rate.disabled = false;
+      setStatus(`Rating failed: ${e.message}`, true);
+    }
+  };
+  actions.appendChild(rate);
+  slot.appendChild(actions);
+}
+
+function setStatus(message, isError = false) {
+  status.textContent = message;
+  status.style.color = isError ? 'var(--danger)' : 'var(--muted)';
+}
+
+function showEmptyState() {
+  out.innerHTML = '<div class="empty"><strong>Your listings will appear here</strong>Fill in a product above and select Generate listings.</div>';
+}
+
+async function go() {
+  goBtn.disabled = true;
+  goBtn.textContent = 'Generating…';
+  out.replaceChildren();
+  results.length = 0;
+  let succeeded = 0;
+  try {
+    const cards = [...rows.children];
+    for (const [i, s] of cards.entries()) {
+      const slot = out.appendChild(document.createElement('div'));
+      slot.className = 'empty';
+      slot.textContent = `Product ${i + 1}: generating draft…`;
+      const fd = new FormData();
+      for (const e of s.querySelectorAll('input')) {
+        if (e.type === 'file') [...e.files].forEach(f => fd.append('files', f));
+        else fd.append(e.name, e.value);
+      }
+      fd.append('tone', tone.value);
+      try {
+        results[i] = await call('/listings', fd);
+        show(slot, i);
+        succeeded++;
+      } catch (e) {
+        slot.className = 'empty';
+        slot.textContent = `Product ${i + 1} failed: ${e.message}`;
+        setStatus(`One product failed: ${e.message}`, true);
+      }
+    }
+    if (succeeded) setStatus(`Finished: ${succeeded} of ${cards.length} product listing${cards.length === 1 ? '' : 's'} generated.`);
+    else setStatus('No listings were generated. Check the product details and try again.', true);
+  } finally {
+    goBtn.disabled = false;
+    goBtn.textContent = '✦ Generate listings';
+  }
+}
+
+async function showHistory() {
+  try {
+    const list = await call('/listings');
+    out.replaceChildren();
+    results.length = 0;
+    if (!list.length) {
+      showEmptyState();
+      setStatus('No saved listings in history yet.');
+      return;
+    }
+    list.forEach((d, i) => {
+      results[i] = d;
+      show(out.appendChild(document.createElement('div')), i);
+    });
+    setStatus(`Loaded ${list.length} saved listing${list.length === 1 ? '' : 's'} from history.`);
+  } catch (e) {
+    setStatus(`History failed: ${e.message}`, true);
+  }
+}
+
+async function copyAll() {
+  const text = [...out.querySelectorAll('.result-card')].map((card, i) => {
+    const d = results[i];
+    return d ? fmt(d, i) : '';
+  }).filter(Boolean).join('\n');
+  if (!text) {
+    setStatus('Generate or load listings before copying.');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    setStatus('All displayed listings copied to clipboard.');
+  } catch (e) {
+    setStatus('Clipboard access failed. Open the app through its local address and allow clipboard access.', true);
+  }
+}
+
+async function exportCsv() {
+  const rowsOut = results.filter(Boolean).map(d => ({
+     product_name: d.facts.product_name,
+    craft: d.facts.craft, material: d.facts.material, dimensions: d.facts.dimensions,
+    maker: d.facts.maker, village: d.facts.village,
+    english_title: d.content.en.title, english_description: d.content.en.description,
+    hindi_title: d.content.hi.title, hindi_description: d.content.hi.description,
+    odia_draft_title_needs_review: d.content.or.title, odia_draft_description_needs_review: d.content.or.description
+  }));
+  if (!rowsOut.length) {
+    setStatus('Generate or load listings before exporting.');
+    return;
+  }
+  try {
+    const r = await fetch('/csv', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(rowsOut)});
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'listings.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    setStatus('CSV export started.');
+  } catch (e) {
+    setStatus(`CSV export failed: ${e.message}`, true);
+  }
+}
+</script>
+</body>
+</html>
